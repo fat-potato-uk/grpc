@@ -1,6 +1,6 @@
-### Polymorphic Json and Freemarker
+### gRPC
 
-In this example we are going to create a gRpc connection. For this, we must include the following
+In this example we are going to create a gRPC connection. For this, we must include the following
 in our `pom.xml`:
 
 ```xml
@@ -109,5 +109,5 @@ public class HelloWorldServiceImpl extends HelloWorldServiceGrpc.HelloWorldServi
 }
 ```
 
-There is a lot of flexibility in the way gRpc can communicate with other services,
+There is a lot of flexibility in the way gRPC can communicate with other services,
 this hopefully provides a (very) brief introduction on how you can achieve this!
