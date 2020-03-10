@@ -1,7 +1,7 @@
 ### gRPC
 
-In this example we are going to create a gRPC connection between a client and server. For this, we must include the following
-in our `pom.xml`:
+In this example we are going to create a gRPC connection between a client and server. For this, we must include the
+following in our `pom.xml`:
 
 ```xml
 <plugin>
