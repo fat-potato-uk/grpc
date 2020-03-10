@@ -57,6 +57,31 @@ we can use to create a client and server:
 ```java
 @Component
 @Slf4j
+public class HelloWorldClient {
+
+  private HelloWorldServiceGrpc.HelloWorldServiceBlockingStub helloWorldServiceBlockingStub;
+
+  @PostConstruct
+  private void init() {
+    var managedChannel = ManagedChannelBuilder.forAddress("localhost", 6565).usePlaintext().build();
+    helloWorldServiceBlockingStub = HelloWorldServiceGrpc.newBlockingStub(managedChannel);
+  }
+
+  public String sayHello(String firstName, String lastName) {
+    var person = Person.newBuilder().setFirstName(firstName).setLastName(lastName).build();
+    log.info("client sending {}", person);
+
+    var greeting = helloWorldServiceBlockingStub.sayHello(person);
+    log.info("client received {}", greeting);
+
+    return greeting.getMessage();
+  }
+}
+```
+
+```java
+@Component
+@Slf4j
 public class HelloWorldCallbackClient {
 
   private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -109,5 +134,13 @@ public class HelloWorldServiceImpl extends HelloWorldServiceGrpc.HelloWorldServi
 }
 ```
 
-There is a lot of flexibility in the way gRpc can communicate with other services,
-this hopefully provides a (very) brief introduction on how you can achieve this!
+The first bean is a basic blocking service that sends sets up a channel after initialisation, sends a request
+and then waits for the response (hence the blocking!). The second is a similar variant that uses an asynchronous
+`Future` stub to not block on waiting for receipt of the message.
+
+The server (denoted by the `@GRpcService` annotation), simply overrides the appropriate to allow it to receive
+the `Person` requests from either client.
+
+You can test this by running the application and hitting the relevant endpoints defined in the `MessageController`
+
+Enjoy!
